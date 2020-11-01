@@ -64,6 +64,7 @@ public class Drag : MonoBehaviour
         if (nowBoard != null)
             if (nowBoard.GetComponent<Board>().isOwner && boardsUp[(int)nowBoard.transform.position.x, (int)nowBoard.transform.position.y] == null)
             {
+                soldier.GetComponent<Soldier>().soldierName = "Infantry";
                 GameObject now = Instantiate(soldier, nowBoard.transform.position + new Vector3(0, 0, -1), new Quaternion());
                 now.GetComponent<Soldier>().isOwner = true;
                 boardsUp[(int)nowBoard.transform.position.x, (int)nowBoard.transform.position.y] = now;
@@ -82,7 +83,7 @@ public class Drag : MonoBehaviour
         Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition + new Vector3(0, 0, 9)); // TODO
         int i = Mathf.RoundToInt(mouseWorldPos.x);
         int j = Mathf.RoundToInt(mouseWorldPos.y);
-        if (i >= 0 && i < width && j >= 0 && j < height) nowBoard = boards[i, j];
+        if (i >= 0 && i < width && j >= 0 && j < 2) nowBoard = boards[i, j]; // 前两行
         else return;
 
         if (!nowBoard.GetComponent<Board>().isOwner) return;

@@ -92,4 +92,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9617e2a6536fb89458bb4f91fa378680, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  owner: 0
+  isOwner: 0
+  addType: 0
+  addVal: 0
+  col1: {r: 0, g: 1, b: 0.112401724, a: 0.61960787}
+  col2: {r: 0.90588236, g: 0.5450028, b: 0.06274509, a: 0.61960787}

@@ -8,6 +8,7 @@ public class Computer : MonoBehaviour
 
     [Header("战斗属性")]
     public float timeOfGo;
+    public List<string> SoldierNames;
 
     [Header("AI属性")]
     public float aITime;
@@ -30,6 +31,9 @@ public class Computer : MonoBehaviour
         width = Scene.instance.width;
         boards = Scene.instance.boards;
         boardsUp = Scene.instance.boardsUp;
+
+        foreach (var item in SoldierManager.instance.dicSoldier)
+            SoldierNames.Add(item.Key);
     }
 
     private float aITimeNow;
@@ -40,13 +44,18 @@ public class Computer : MonoBehaviour
         if (aITimeNow >= aITime)
         {
             aITimeNow = 0;
-            int i = Random.Range(0, width);
-            int j = Random.Range(0, height);
-            if (!boards[i, j].GetComponent<Board>().isOwner && boardsUp[i, j] == null)
+            while (true)
             {
-                GameObject now = Instantiate(soldier, new Vector3(i, j, -1), new Quaternion());
-                now.GetComponent<Soldier>().isOwner = false;
-                boardsUp[i, j] = now;
+                int i = Random.Range(0, width);
+                int j = Random.Range(height - 2, height); // 后两行
+                if (!boards[i, j].GetComponent<Board>().isOwner && boardsUp[i, j] == null)
+                {
+                    soldier.GetComponent<Soldier>().soldierName = SoldierNames[Random.Range(0, SoldierNames.Count)]; // TODO
+                    GameObject now = Instantiate(soldier, new Vector3(i, j, -1), new Quaternion());
+                    now.GetComponent<Soldier>().isOwner = false;
+                    boardsUp[i, j] = now;
+                    break;
+                }
             }
         }
     }
