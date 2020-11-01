@@ -4,29 +4,36 @@ using UnityEngine;
 
 public class Drag : MonoBehaviour
 {
+    public static Drag instance;
+
     [Header("初始属性")]
     public Vector3 startPos;
     public GameObject soldier;
-    public List<GameObject> childs;
 
     [Header("来自Scene的属性")]
     public int height; // 8
     public int width; // 5
     public GameObject[,] boards;
+    public GameObject[,] boardsUp;
 
-    public Color defColor;
-    public Color selColor;
+    public Color ownerColor;
+    public Color selectColor;
+
+    void Awake()
+    {
+        instance = this;
+    }
 
     void Start()
     {
         height = Scene.instance.height;
         width = Scene.instance.width;
         boards = Scene.instance.boards;
+        boardsUp = Scene.instance.boardsUp;
 
-        defColor = Scene.instance.defColor;
-        selColor = Scene.instance.selColor;
+        ownerColor = Scene.instance.ownerColor;
+        selectColor = Scene.instance.selectColor;
 
-        childs = new List<GameObject>();
         startPos = transform.position;
     }
 
@@ -54,11 +61,19 @@ public class Drag : MonoBehaviour
     void OnMouseUp()
     {
         // 释放鼠标 TODO OnMouseUp OnMouseUpAsButton
-        GameObject now = Instantiate(soldier, nowBoard.transform.position + new Vector3(0, 0, -1), new Quaternion());
-        childs.Add(now);
-        nowBoard.GetComponent<MeshRenderer>().material.color = defColor;
+        if (nowBoard != null)
+            if (nowBoard.GetComponent<Board>().isOwner && boardsUp[(int)nowBoard.transform.position.x, (int)nowBoard.transform.position.y] == null)
+            {
+                GameObject now = Instantiate(soldier, nowBoard.transform.position + new Vector3(0, 0, -1), new Quaternion());
+                now.GetComponent<Soldier>().isOwner = true;
+                boardsUp[(int)nowBoard.transform.position.x, (int)nowBoard.transform.position.y] = now;
+                nowBoard.GetComponent<MeshRenderer>().material.color = ownerColor;
+            }
+
+        if (lastBoard != null) lastBoard.GetComponent<MeshRenderer>().material.color = ownerColor;
         transform.position = startPos;
         nowBoard = lastBoard = null; // 一定复原
+        screenPos = offset = new Vector3();
     }
 
     void upDateSel()
@@ -68,9 +83,14 @@ public class Drag : MonoBehaviour
         int i = Mathf.RoundToInt(mouseWorldPos.x);
         int j = Mathf.RoundToInt(mouseWorldPos.y);
         if (i >= 0 && i < width && j >= 0 && j < height) nowBoard = boards[i, j];
+        else return;
+
+        if (!nowBoard.GetComponent<Board>().isOwner) return;
+
         if (nowBoard == lastBoard) return;
-        nowBoard.GetComponent<MeshRenderer>().material.color = selColor;
-        if (lastBoard != null) lastBoard.GetComponent<MeshRenderer>().material.color = defColor;
+
+        nowBoard.GetComponent<MeshRenderer>().material.color = selectColor;
+        if (lastBoard != null) lastBoard.GetComponent<MeshRenderer>().material.color = ownerColor;
         lastBoard = nowBoard;
     }
 }

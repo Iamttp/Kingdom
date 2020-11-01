@@ -9,12 +9,14 @@ public class Scene : MonoBehaviour
     public int width; // 5
     public GameObject board;
 
-    public Color defColor;
-    public Color selColor;
+    public Color ownerColor;
+    public Color enemyColor;
+    public Color selectColor;
 
     [Header("棋盘变量")]
     public static Scene instance;
     public GameObject[,] boards;
+    public GameObject[,] boardsUp;
 
     void Awake()
     {
@@ -22,7 +24,7 @@ public class Scene : MonoBehaviour
 
         instance = this;
         boards = new GameObject[width, height];
-
+        boardsUp = new GameObject[width, height];
         initBoard();
     }
 
@@ -37,11 +39,18 @@ public class Scene : MonoBehaviour
     void initBoard()
     {
         for (int i = 0; i < width; i++)
-            for (int j = 0; j < height; j++)
+        {
+            int temp = height / 2;
+            for (int j = 0; j < temp; j++)
             {
                 boards[i, j] = Instantiate(board, new Vector3(i, j), new Quaternion(), transform);
-                boards[i, j].AddComponent<Board>();
-                boards[i, j].GetComponent<MeshRenderer>().material.color = defColor;
+                boards[i, j].GetComponent<Board>().isOwner = true;
             }
+            for (int j = temp; j < height; j++)
+            {
+                boards[i, j] = Instantiate(board, new Vector3(i, j), new Quaternion(), transform);
+                boards[i, j].GetComponent<Board>().isOwner = false;
+            }
+        }
     }
 }
