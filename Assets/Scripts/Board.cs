@@ -16,8 +16,11 @@ public class Board : MonoBehaviour
 
     public void UpdateColor()
     {
-        if (isOwner) gameObject.GetComponent<MeshRenderer>().material.color = Scene.instance.ownerColor;
-        else gameObject.GetComponent<MeshRenderer>().material.color = Scene.instance.enemyColor;
+        var mat = gameObject.GetComponent<MeshRenderer>().material;
+        if (addType == 0) mat.SetColor("_ColorIn", col1);
+        else mat.SetColor("_ColorIn", col2);
+        if (isOwner) mat.SetColor("_ColorOut", Scene.instance.ownerColor);
+        else mat.SetColor("_ColorOut", Scene.instance.enemyColor);
     }
 
     GUISkin guiMe;
@@ -28,7 +31,7 @@ public class Board : MonoBehaviour
         addType = Random.Range(0, 2);
         addVal = Random.Range(0, 10);
 
-        guiMe = Resources.Load<GUISkin>("Textures/skinOfBoard");
+        guiMe = Resources.Load<GUISkin>("Textures/Board");
         style1 = guiMe.button;
         style2 = guiMe.label;
         UpdateColor();
@@ -38,10 +41,10 @@ public class Board : MonoBehaviour
     void Update()
     {
         addTimeNow += Time.deltaTime;
-        if(addTimeNow >= addTime)
+        if (addTimeNow >= addTime)
         {
             addTimeNow = 0;
-            if(addType == 0)
+            if (addType == 0)
             {
                 if (isOwner) User.instance.foodVal += addVal;
                 else Computer.instance.foodVal += addVal;
@@ -56,10 +59,11 @@ public class Board : MonoBehaviour
 
     void OnGUI()
     {
-        if (addType == 0) style2.normal.textColor = col1;
-        else style2.normal.textColor = col2;
-        Vector2 mScreen = Camera.main.WorldToScreenPoint(transform.position);
-        Vector2 mPoint = new Vector2(mScreen.x, Screen.height - mScreen.y);
-        GUI.Label(new Rect(mPoint.x - 40, mPoint.y + 10, 150, 70), "+" + addVal.ToString(), style2);
+        if (!UIShow.instance.isTopCam) return;
+
+        // TODO
+        //Vector2 mScreen = Camera.main.WorldToScreenPoint(transform.position);
+        //Vector2 mPoint = new Vector2(mScreen.x, Screen.height - mScreen.y);
+        //GUI.Label(new Rect(mPoint.x - 40, mPoint.y + 10, 150, 70), addVal.ToString(), style2);
     }
 }

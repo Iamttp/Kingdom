@@ -10,14 +10,17 @@ public class User : MonoBehaviour
     [Header("玩家属性")]
     public Text foodText;
     public Text mineralText;
+    public Text lifeText;
 
     public int foodVal;
     public int mineralVal;
+    public int lifeVal;
 
     void Awake()
     {
         instance = this;
         foodVal = mineralVal = 100; // 初始资源
+        lifeVal = 1000;
     }
 
     void Start()
@@ -26,7 +29,12 @@ public class User : MonoBehaviour
 
     void Update()
     {
+        if(lifeVal <= 0)
+        {
+            Debug.Log("GameOver");
+        }
         foodText.text = "Food : " + foodVal;
-        mineralText.text = "Mineral : " + mineralVal;
+        mineralText.text = "Mine : " + mineralVal;
+        lifeText.text = "Life : " + lifeVal;
     }
 }

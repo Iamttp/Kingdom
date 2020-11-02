@@ -18,6 +18,7 @@ public class UIShow : MonoBehaviour
     void Awake()
     {
         instance = this;
+        isTopCam = true;
     }
 
     void Start()
@@ -49,5 +50,18 @@ public class UIShow : MonoBehaviour
             GameObject now = Instantiate(obj);
             dragList.Add(now);
         }
+    }
+
+
+    public bool isTopCam;
+    public GameObject topCam;
+    public GameObject downCam;
+    public Button soldierBtn;
+    public void switchCam()
+    {
+        isTopCam = !isTopCam;
+        topCam.SetActive(isTopCam);
+        downCam.SetActive(!isTopCam);
+        soldierBtn.enabled = isTopCam;
     }
 }

@@ -12,6 +12,7 @@ public class Scene : MonoBehaviour
     public Color ownerColor;
     public Color enemyColor;
     public Color selectColor;
+    public Color preSelectColor;
 
     [Header("棋盘变量")]
     public static Scene instance;

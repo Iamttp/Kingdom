@@ -51,6 +51,9 @@ MonoBehaviour:
   timeOfGo: 0
   height: 0
   width: 0
+  blood_red: {fileID: 2800000, guid: 39d24518aa51bea4c9e7748437c0cf68, type: 3}
+  blood_blue: {fileID: 2800000, guid: 3f45c63ca3b5fb44a9b23152fc290aed, type: 3}
+  blood_black: {fileID: 2800000, guid: afef1ae970bb21e408f41a7d05527cf5, type: 3}
 --- !u!1001 &7563599819139321455
 PrefabInstance:
   m_ObjectHideFlags: 0

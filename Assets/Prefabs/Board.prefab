@@ -59,7 +59,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 64625a265873f6745a063043a8667831, type: 2}
+  - {fileID: 2100000, guid: 2e69edf1d9288ff449a3380379b0ea22, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -96,5 +96,5 @@ MonoBehaviour:
   isOwner: 0
   addType: 0
   addVal: 0
-  col1: {r: 0, g: 1, b: 0.112401724, a: 0.61960787}
-  col2: {r: 0.90588236, g: 0.5450028, b: 0.06274509, a: 0.61960787}
+  col1: {r: 0.5258544, g: 0.9528302, b: 0.5744124, a: 1}
+  col2: {r: 0.9528302, g: 0.7701243, b: 0.5258544, a: 1}

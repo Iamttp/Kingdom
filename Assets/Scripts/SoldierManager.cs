@@ -19,7 +19,7 @@ public class SoldierManager : MonoBehaviour
         public int needFood;
         public int needMineral;
         //public GameObject prefab; // TODO
-        public Color col; // TODO
+        //public Color col; // TODO
     }
     public node[] nodes;
     public Dictionary<string, node> dicSoldier;

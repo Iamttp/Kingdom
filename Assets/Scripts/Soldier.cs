@@ -23,7 +23,7 @@ public class Soldier : MonoBehaviour
 
     void Start()
     {
-        guiMe = Resources.Load<GUISkin>("Textures/skin");
+        guiMe = Resources.Load<GUISkin>("Textures/Soldier");
         style1 = guiMe.button;
         style2 = guiMe.label;
 
@@ -37,19 +37,37 @@ public class Soldier : MonoBehaviour
         if (isOwner)
         {
             order = 1; // 士兵前进方向
-            //gameObject.GetComponent<MeshRenderer>().material.color = Scene.instance.ownerColor; TODO
         }
         else
         {
             order = -1;
-            //gameObject.GetComponent<MeshRenderer>().material.color = Scene.instance.enemyColor;
         }
 
         s = SoldierManager.instance.dicSoldier[soldierName];
     }
 
+    bool attackState(int i, int index)
+    {
+        if (index >= 0 && index < height)
+            if (boardsUp[i, index] != null && boardsUp[i, index].GetComponent<Soldier>().isOwner != isOwner)
+            {
+                // Ready Attack
+                animator.SetTrigger("isAttack");
+                boardsUp[i, index].GetComponent<Soldier>().s.lifeVal -= s.attackVal;
+                if (boardsUp[i, index].GetComponent<Soldier>().s.lifeVal <= 0)
+                {
+                    DestroyImmediate(boardsUp[i, index]); // TODO
+                    boardsUp[i, index] = null;
+                }
+                return true;
+            }
+        return false;
+    }
+
     private float timeOfGoNow = 0;
     private float timeOfAttackNow = 0;
+    bool isAttack = false;
+
     void Update()
     {
         int i = (int)transform.position.x;
@@ -57,49 +75,45 @@ public class Soldier : MonoBehaviour
         if (j >= height || j < 0)
         {
             boardsUp[i, j - order] = null;
+            if (isOwner) Computer.instance.lifeVal -= s.lifeVal;
+            else User.instance.lifeVal -= s.lifeVal;
             DestroyImmediate(gameObject); // TODO
             return;
         }
 
-
         timeOfAttackNow += Time.deltaTime;
+        timeOfGoNow += Time.deltaTime;
+
         if (timeOfAttackNow >= s.attackTime)
         {
             timeOfAttackNow = 0;
 
-            animator.SetBool("isChange", false);
-            animator.SetBool("isAttack", false);
-
-            int jAttack = j + s.attackDis;
-            for(int index = j; index <= jAttack && index < height; index++)
+            isAttack = false;
+            int jAttack = j + s.attackDis * order;
+            if (jAttack != j)
             {
-                if (boardsUp[i, index] != null && boardsUp[i, index].GetComponent<Soldier>().isOwner != isOwner)
+                if (attackState(i, jAttack) || attackState(i, j)) // 先考虑远处，远处不中，再进攻近处
                 {
-                    // Ready Attack
-                    animator.SetBool("isAttack", true);
-                    boardsUp[i, index].GetComponent<Soldier>().s.lifeVal -= s.attackVal;
-                    if (boardsUp[i, index].GetComponent<Soldier>().s.lifeVal <= 0)
-                    {
-                        DestroyImmediate(boardsUp[i, index]); // TODO
-                        boardsUp[i, index] = null;
-                        return;
-                    }
+                    isAttack = true;
+                }
+            }
+            else
+            {
+                if (attackState(i, j))
+                {
+                    isAttack = true;
                 }
             }
         }
 
-        timeOfGoNow += Time.deltaTime;
         if (timeOfGoNow >= timeOfGo)
         {
             timeOfGoNow = 0;
 
-            animator.SetBool("isChange", false);
-            animator.SetBool("isAttack", false);
-
-            if (boardsUp[i, j] != null && boardsUp[i, j].GetComponent<Soldier>().isOwner == isOwner)
+            if (isAttack || (boardsUp[i, j] != null && boardsUp[i, j].GetComponent<Soldier>().isOwner == isOwner))
             {
                 // Ready wait
-                return;
+                animator.SetBool("isChange", false);
             }
             else if (boardsUp[i, j] == null)
             {
@@ -107,7 +121,7 @@ public class Soldier : MonoBehaviour
                 animator.SetBool("isChange", true);
                 transform.position = new Vector3(i, j, transform.position.z);
 
-                if (boards[i, j].GetComponent<Board>().isOwner != isOwner && j != height - 1 && j != 0) // 最后一行不攻占
+                if (boards[i, j].GetComponent<Board>().isOwner != isOwner && j < height - Computer.instance.allowRow && j >= Computer.instance.allowRow) // 最后两行不攻占
                 {
                     boards[i, j].GetComponent<Board>().isOwner = isOwner;
                     boards[i, j].GetComponent<Board>().UpdateColor();
@@ -121,12 +135,28 @@ public class Soldier : MonoBehaviour
     GUISkin guiMe;
     GUIStyle style1;
     GUIStyle style2;
+    //红色血条贴图
+    public Texture2D blood_red;
+    public Texture2D blood_blue;
+    //黑色血条贴图
+    public Texture2D blood_black;
 
     void OnGUI()
     {
+        if (!UIShow.instance.isTopCam) return;
+
         Vector2 mScreen = Camera.main.WorldToScreenPoint(transform.position);
         Vector2 mPoint = new Vector2(mScreen.x, Screen.height - mScreen.y);
-        GUI.Label(new Rect(mPoint.x - 40, mPoint.y + 10, 150, 70), s.lifeVal.ToString() + "/" + s.maxVal.ToString(), style2);
-        GUI.Label(new Rect(mPoint.x - 40, mPoint.y + 80, 150, 70), s.name, style2);
+
+        Vector2 bloodSize = GUI.skin.label.CalcSize(new GUIContent(blood_red));
+
+        //通过血值计算红色血条显示区域
+        int blood_width = blood_red.width * s.lifeVal / s.maxVal;
+        //先绘制黑色血条
+        GUI.DrawTexture(new Rect(mPoint.x - (bloodSize.x / 2), mPoint.y - bloodSize.y, bloodSize.x, bloodSize.y), blood_black);
+        //在绘制红色血条
+        if (isOwner) GUI.DrawTexture(new Rect(mPoint.x - (bloodSize.x / 2), mPoint.y - bloodSize.y, blood_width, bloodSize.y), blood_red);
+        else GUI.DrawTexture(new Rect(mPoint.x - (bloodSize.x / 2), mPoint.y - bloodSize.y, blood_width, bloodSize.y), blood_blue);
+        GUI.Label(new Rect(mPoint.x - 40, mPoint.y + 10, 150, 70), s.name, style2);
     }
 }
