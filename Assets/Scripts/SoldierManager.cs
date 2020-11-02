@@ -15,6 +15,9 @@ public class SoldierManager : MonoBehaviour
         public int attackVal;
         public int attackDis;
         public float attackTime;
+
+        public int needFood;
+        public int needMineral;
         //public GameObject prefab; // TODO
         public Color col; // TODO
     }

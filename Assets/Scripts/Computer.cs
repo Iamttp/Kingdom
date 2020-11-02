@@ -13,6 +13,8 @@ public class Computer : MonoBehaviour
     [Header("AI属性")]
     public float aITime;
     public GameObject soldier;
+    public int foodVal;
+    public int mineralVal;
 
     [Header("来自Scene的属性")]
     public int height; // 8
@@ -44,17 +46,33 @@ public class Computer : MonoBehaviour
         if (aITimeNow >= aITime)
         {
             aITimeNow = 0;
-            while (true)
+
+            // TODO
+            Debug.Log(foodVal + " " + mineralVal);
+
+            int tryTime = 3;
+            while (tryTime-- > 0)
             {
                 int i = Random.Range(0, width);
                 int j = Random.Range(height - 2, height); // 后两行
                 if (!boards[i, j].GetComponent<Board>().isOwner && boardsUp[i, j] == null)
                 {
-                    soldier.GetComponent<Soldier>().soldierName = SoldierNames[Random.Range(0, SoldierNames.Count)]; // TODO
-                    GameObject now = Instantiate(soldier, new Vector3(i, j, -1), new Quaternion());
-                    now.GetComponent<Soldier>().isOwner = false;
-                    boardsUp[i, j] = now;
-                    break;
+                    string soldierName = SoldierNames[Random.Range(0, SoldierNames.Count)]; // TODO
+                    soldier.GetComponent<Soldier>().soldierName = soldierName;
+                    if (SoldierManager.instance.dicSoldier[soldierName].needFood <= foodVal &&
+                        SoldierManager.instance.dicSoldier[soldierName].needMineral <= mineralVal)
+                    {
+                        foodVal -= SoldierManager.instance.dicSoldier[soldierName].needFood;
+                        mineralVal -= SoldierManager.instance.dicSoldier[soldierName].needMineral;
+
+                        Vector3 rotationVector = new Vector3(0, 0, 180);
+                        Quaternion rotation = Quaternion.Euler(rotationVector);
+
+                        GameObject now = Instantiate(soldier, new Vector3(i, j, -1), rotation);
+                        now.GetComponent<Soldier>().isOwner = false;
+                        boardsUp[i, j] = now;
+                        break;
+                    }
                 }
             }
         }

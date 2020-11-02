@@ -8,7 +8,7 @@ public class UIShow : MonoBehaviour
     public static UIShow instance;
 
     [Header("UI拖拽属性")]
-    public GameObject dragObj;
+    public GameObject[] dragObj;
     public GameObject PlaneOfMain;
     public GameObject PlaneOfSoldier;
 
@@ -44,7 +44,10 @@ public class UIShow : MonoBehaviour
     {
         PlaneOfMain.SetActive(false);
         PlaneOfSoldier.SetActive(true);
-        GameObject now = Instantiate(dragObj);
-        dragList.Add(now);
+        foreach(var obj in dragObj)
+        {
+            GameObject now = Instantiate(obj);
+            dragList.Add(now);
+        }
     }
 }

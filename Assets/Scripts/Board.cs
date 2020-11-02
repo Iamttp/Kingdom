@@ -5,6 +5,8 @@ using UnityEngine;
 public class Board : MonoBehaviour
 {
     [Header("块消息")]
+    public float addTime;
+
     public bool isOwner;
 
     public int addType; // 0 food 1 mineral
@@ -32,9 +34,24 @@ public class Board : MonoBehaviour
         UpdateColor();
     }
 
+    private float addTimeNow;
     void Update()
     {
-
+        addTimeNow += Time.deltaTime;
+        if(addTimeNow >= addTime)
+        {
+            addTimeNow = 0;
+            if(addType == 0)
+            {
+                if (isOwner) User.instance.foodVal += addVal;
+                else Computer.instance.foodVal += addVal;
+            }
+            else
+            {
+                if (isOwner) User.instance.mineralVal += addVal;
+                else Computer.instance.mineralVal += addVal;
+            }
+        }
     }
 
     void OnGUI()

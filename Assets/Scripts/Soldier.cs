@@ -6,6 +6,7 @@ public class Soldier : MonoBehaviour
 {
     [Header("士兵属性")]
     public string soldierName;
+    public Animator animator;
     SoldierManager.node s;
 
     public int order; // 1 -1 0 ， 1 我方前进 -1 敌方前进 0 进入攻击状态
@@ -36,12 +37,12 @@ public class Soldier : MonoBehaviour
         if (isOwner)
         {
             order = 1; // 士兵前进方向
-            gameObject.GetComponent<MeshRenderer>().material.color = Scene.instance.ownerColor;
+            //gameObject.GetComponent<MeshRenderer>().material.color = Scene.instance.ownerColor; TODO
         }
         else
         {
             order = -1;
-            gameObject.GetComponent<MeshRenderer>().material.color = Scene.instance.enemyColor;
+            //gameObject.GetComponent<MeshRenderer>().material.color = Scene.instance.enemyColor;
         }
 
         s = SoldierManager.instance.dicSoldier[soldierName];
@@ -60,17 +61,22 @@ public class Soldier : MonoBehaviour
             return;
         }
 
+
         timeOfAttackNow += Time.deltaTime;
         if (timeOfAttackNow >= s.attackTime)
         {
             timeOfAttackNow = 0;
 
+            animator.SetBool("isChange", false);
+            animator.SetBool("isAttack", false);
+
             int jAttack = j + s.attackDis;
-            for(int index = j; index <= jAttack; index++)
+            for(int index = j; index <= jAttack && index < height; index++)
             {
                 if (boardsUp[i, index] != null && boardsUp[i, index].GetComponent<Soldier>().isOwner != isOwner)
                 {
                     // Ready Attack
+                    animator.SetBool("isAttack", true);
                     boardsUp[i, index].GetComponent<Soldier>().s.lifeVal -= s.attackVal;
                     if (boardsUp[i, index].GetComponent<Soldier>().s.lifeVal <= 0)
                     {
@@ -87,6 +93,9 @@ public class Soldier : MonoBehaviour
         {
             timeOfGoNow = 0;
 
+            animator.SetBool("isChange", false);
+            animator.SetBool("isAttack", false);
+
             if (boardsUp[i, j] != null && boardsUp[i, j].GetComponent<Soldier>().isOwner == isOwner)
             {
                 // Ready wait
@@ -95,6 +104,7 @@ public class Soldier : MonoBehaviour
             else if (boardsUp[i, j] == null)
             {
                 // Ready Move
+                animator.SetBool("isChange", true);
                 transform.position = new Vector3(i, j, transform.position.z);
 
                 if (boards[i, j].GetComponent<Board>().isOwner != isOwner && j != height - 1 && j != 0) // 最后一行不攻占

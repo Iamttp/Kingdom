@@ -133,6 +133,7 @@ GameObject:
   - component: {fileID: 22901325}
   - component: {fileID: 22901326}
   - component: {fileID: 22901327}
+  - component: {fileID: 22901328}
   m_Layer: 0
   m_Name: GameObject
   m_TagString: Untagged
@@ -187,7 +188,9 @@ MonoBehaviour:
   timeOfGo: 2
   SoldierNames: []
   aITime: 3
-  soldier: {fileID: 3521090164060235799, guid: ac384313cb551cb49be750415936c503, type: 3}
+  soldier: {fileID: 1177588847265674014, guid: ac384313cb551cb49be750415936c503, type: 3}
+  foodVal: 0
+  mineralVal: 0
   height: 0
   width: 0
 --- !u!114 &22901327
@@ -209,6 +212,8 @@ MonoBehaviour:
     attackVal: 2
     attackDis: 1
     attackTime: 0.5
+    needFood: 600
+    needMineral: 600
     col: {r: 0.754717, g: 0.09611962, b: 0.6226117, a: 1}
   - name: Knight
     lifeVal: 10
@@ -216,6 +221,8 @@ MonoBehaviour:
     attackVal: 4
     attackDis: 0
     attackTime: 0.2
+    needFood: 1500
+    needMineral: 300
     col: {r: 0.13775828, g: 0.10346207, b: 0.8773585, a: 1}
   - name: Infantry
     lifeVal: 15
@@ -223,7 +230,25 @@ MonoBehaviour:
     attackVal: 3
     attackDis: 0
     attackTime: 0.8
+    needFood: 800
+    needMineral: 300
     col: {r: 0.3186632, g: 0.8773585, b: 0.35662842, a: 1}
+--- !u!114 &22901328
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 22901323}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6678bfa8898b7ed49a84d195e4b90271, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  foodText: {fileID: 545166824}
+  mineralText: {fileID: 710936109}
+  foodVal: 0
+  mineralVal: 0
 --- !u!1 &47489792
 GameObject:
   m_ObjectHideFlags: 0
@@ -670,7 +695,7 @@ GameObject:
   - component: {fileID: 545166825}
   - component: {fileID: 545166824}
   m_Layer: 5
-  m_Name: Text
+  m_Name: FoodText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -692,8 +717,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 200, y: 0}
-  m_SizeDelta: {x: 400, y: 0}
+  m_AnchoredPosition: {x: 270, y: 0}
+  m_SizeDelta: {x: 540, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &545166824
 MonoBehaviour:
@@ -764,7 +789,7 @@ Light:
   serializedVersion: 10
   m_Type: 1
   m_Shape: 0
-  m_Color: {r: 0.5283019, g: 0.5283019, b: 0.5283019, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Intensity: 1
   m_Range: 10
   m_SpotAngle: 30
@@ -840,7 +865,7 @@ GameObject:
   - component: {fileID: 710936110}
   - component: {fileID: 710936109}
   m_Layer: 5
-  m_Name: Text (1)
+  m_Name: MineralText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -862,8 +887,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -200, y: 0}
-  m_SizeDelta: {x: 400, y: 0}
+  m_AnchoredPosition: {x: -270, y: 0}
+  m_SizeDelta: {x: 540, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &710936109
 MonoBehaviour:
@@ -1311,7 +1336,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f654fb2354ed0146a1a0612a59ad772, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dragObj: {fileID: 5693097616043900137, guid: 61b8cb5b6179ba64387e19b2064ed4cf, type: 3}
+  dragObj:
+  - {fileID: 5693097616043900137, guid: 61b8cb5b6179ba64387e19b2064ed4cf, type: 3}
+  - {fileID: 5693097616043900137, guid: 28aa8b36708be634295a098950b6e7db, type: 3}
+  - {fileID: 5693097616043900137, guid: e79e29d2e0be42843b205438c71371f8, type: 3}
   PlaneOfMain: {fileID: 483013102}
   PlaneOfSoldier: {fileID: 47489792}
   dragList: []
