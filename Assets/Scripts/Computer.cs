@@ -13,7 +13,6 @@ public class Computer : MonoBehaviour
 
     [Header("AI属性")]
     public float aITime;
-    public GameObject soldier;
     public int foodVal;
     public int mineralVal;
     public int lifeVal;
@@ -67,18 +66,19 @@ public class Computer : MonoBehaviour
                 if (!boards[i, j].GetComponent<Board>().isOwner && boardsUp[i, j] == null)
                 {
                     string soldierName = SoldierNames[Random.Range(0, SoldierNames.Count)];
+                    var nodeNow = SoldierManager.instance.dicSoldier[soldierName];
                     // TODO
-                    if (SoldierManager.instance.dicSoldier[soldierName].needFood <= foodVal &&
-                    SoldierManager.instance.dicSoldier[soldierName].needMineral <= mineralVal)
+                    //if (SoldierManager.instance.dicSoldier[soldierName].needFood <= foodVal &&
+                    //SoldierManager.instance.dicSoldier[soldierName].needMineral <= mineralVal)
                     {
-                        foodVal -= SoldierManager.instance.dicSoldier[soldierName].needFood;
-                        mineralVal -= SoldierManager.instance.dicSoldier[soldierName].needMineral;
+                        foodVal -= nodeNow.needFood;
+                        mineralVal -= nodeNow.needMineral;
 
                         Vector3 rotationVector = new Vector3(0, 0, 180);
                         Quaternion rotation = Quaternion.Euler(rotationVector);
-                        soldier.GetComponent<Soldier>().soldierName = soldierName;
+                        nodeNow.prefab.GetComponent<Soldier>().soldierName = soldierName;
 
-                        GameObject now = Instantiate(soldier, new Vector3(i, j, -1), rotation);
+                        GameObject now = Instantiate(nodeNow.prefab, new Vector3(i, j, -1), rotation);
                         now.GetComponent<Soldier>().isOwner = false;
                         boardsUp[i, j] = now;
                         break;

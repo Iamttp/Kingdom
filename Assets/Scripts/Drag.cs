@@ -17,7 +17,6 @@ public class Drag : MonoBehaviour
 
     [Header("初始属性")]
     public Vector3 startPos;
-    public GameObject soldier;
     public string nameOfSoldier;
 
     [Header("来自Scene的属性")]
@@ -95,15 +94,16 @@ public class Drag : MonoBehaviour
             if (nowBoard.GetComponent<Board>().isOwner && boardsUp[i, j] == null)
             {
                 string soldierName = nameOfSoldier;
+                var nodeNow = SoldierManager.instance.dicSoldier[soldierName];
                 // TODO
-                if (SoldierManager.instance.dicSoldier[soldierName].needFood <= User.instance.foodVal &&
-                SoldierManager.instance.dicSoldier[soldierName].needMineral <= User.instance.mineralVal)
+                //if (SoldierManager.instance.dicSoldier[soldierName].needFood <= User.instance.foodVal &&
+                //SoldierManager.instance.dicSoldier[soldierName].needMineral <= User.instance.mineralVal)
                 {
-                    User.instance.foodVal -= SoldierManager.instance.dicSoldier[soldierName].needFood;
-                    User.instance.mineralVal -= SoldierManager.instance.dicSoldier[soldierName].needMineral;
+                    User.instance.foodVal -= nodeNow.needFood;
+                    User.instance.mineralVal -= nodeNow.needMineral;
 
-                    soldier.GetComponent<Soldier>().soldierName = soldierName;
-                    GameObject now = Instantiate(soldier, nowBoard.transform.position + new Vector3(0, 0, -1), new Quaternion());
+                    nodeNow.prefab.GetComponent<Soldier>().soldierName = soldierName;
+                    GameObject now = Instantiate(nodeNow.prefab, nowBoard.transform.position + new Vector3(0, 0, -1), new Quaternion());
                     now.GetComponent<Soldier>().isOwner = true;
                     boardsUp[i, j] = now;
                     for (int ii = 0; ii < width; ii++)

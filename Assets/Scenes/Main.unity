@@ -190,7 +190,6 @@ MonoBehaviour:
   SoldierNames: []
   allowRow: 2
   aITime: 3
-  soldier: {fileID: 1177588847265674014, guid: ac384313cb551cb49be750415936c503, type: 3}
   foodVal: 0
   mineralVal: 0
   lifeVal: 0
@@ -217,6 +216,8 @@ MonoBehaviour:
     attackTime: 1
     needFood: 600
     needMineral: 600
+    prefab: {fileID: 1177588847265674014, guid: b99066ebcd2e641498708b99fe2e9665,
+      type: 3}
   - name: Knight
     lifeVal: 100
     maxVal: 100
@@ -225,6 +226,8 @@ MonoBehaviour:
     attackTime: 0.5
     needFood: 1500
     needMineral: 300
+    prefab: {fileID: 1177588847265674014, guid: 51453a8c858bd114cb75c40945109d20,
+      type: 3}
   - name: Infantry
     lifeVal: 150
     maxVal: 150
@@ -233,6 +236,8 @@ MonoBehaviour:
     attackTime: 1.5
     needFood: 800
     needMineral: 300
+    prefab: {fileID: 1177588847265674014, guid: a81078e7c11f71c44b8c92b7275bd923,
+      type: 3}
 --- !u!114 &22901328
 MonoBehaviour:
   m_ObjectHideFlags: 0
