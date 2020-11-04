@@ -11,14 +11,12 @@ public class Board : MonoBehaviour
 
     public int addType; // 0 food 1 mineral
     public int addVal;
-    public Color col1;
-    public Color col2;
+    public Color[] colFood;
+    public Color[] colMine;
 
     public void UpdateColor()
     {
         var mat = gameObject.GetComponent<MeshRenderer>().material;
-        if (addType == 0) mat.SetColor("_ColorIn", col1);
-        else mat.SetColor("_ColorIn", col2);
         if (isOwner) mat.SetColor("_ColorOut", Scene.instance.ownerColor);
         else mat.SetColor("_ColorOut", Scene.instance.enemyColor);
     }
@@ -29,11 +27,15 @@ public class Board : MonoBehaviour
     void Start()
     {
         addType = Random.Range(0, 2);
-        addVal = Random.Range(0, 10);
+        addVal = Random.Range(1, 3); // TODO
 
         guiMe = Resources.Load<GUISkin>("Textures/Board");
         style1 = guiMe.button;
         style2 = guiMe.label;
+
+        var mat = gameObject.GetComponent<MeshRenderer>().material;
+        if (addType == 0) mat.SetColor("_ColorIn", colFood[addVal - 1]);
+        else mat.SetColor("_ColorIn", colMine[addVal - 1]);
         UpdateColor();
     }
 

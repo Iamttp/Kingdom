@@ -12,14 +12,13 @@ public class SoldierManager : MonoBehaviour
 
         public int lifeVal;
         public int maxVal;
-        public int attackVal;
+        public int attackValMin;
+        public int attackValMax;
         public int attackDis;
-        public float attackTime;
 
         public int needFood;
         public int needMineral;
-        public GameObject prefab; // TODO
-        //public Color col; // TODO
+        public GameObject prefab;
     }
     public node[] nodes;
     public Dictionary<string, node> dicSoldier;

@@ -96,8 +96,8 @@ public class Drag : MonoBehaviour
                 string soldierName = nameOfSoldier;
                 var nodeNow = SoldierManager.instance.dicSoldier[soldierName];
                 // TODO
-                //if (SoldierManager.instance.dicSoldier[soldierName].needFood <= User.instance.foodVal &&
-                //SoldierManager.instance.dicSoldier[soldierName].needMineral <= User.instance.mineralVal)
+                if (SoldierManager.instance.dicSoldier[soldierName].needFood <= User.instance.foodVal &&
+                SoldierManager.instance.dicSoldier[soldierName].needMineral <= User.instance.mineralVal)
                 {
                     User.instance.foodVal -= nodeNow.needFood;
                     User.instance.mineralVal -= nodeNow.needMineral;

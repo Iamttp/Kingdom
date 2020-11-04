@@ -35,7 +35,7 @@ public class Computer : MonoBehaviour
         boards = Scene.instance.boards;
         boardsUp = Scene.instance.boardsUp;
 
-        foodVal = mineralVal = 100; // 初始资源
+        //foodVal = mineralVal = 100; // 初始资源
         lifeVal = 1000;
 
         foreach (var item in SoldierManager.instance.dicSoldier)
@@ -68,8 +68,8 @@ public class Computer : MonoBehaviour
                     string soldierName = SoldierNames[Random.Range(0, SoldierNames.Count)];
                     var nodeNow = SoldierManager.instance.dicSoldier[soldierName];
                     // TODO
-                    //if (SoldierManager.instance.dicSoldier[soldierName].needFood <= foodVal &&
-                    //SoldierManager.instance.dicSoldier[soldierName].needMineral <= mineralVal)
+                    if (SoldierManager.instance.dicSoldier[soldierName].needFood <= foodVal &&
+                    SoldierManager.instance.dicSoldier[soldierName].needMineral <= mineralVal)
                     {
                         foodVal -= nodeNow.needFood;
                         mineralVal -= nodeNow.needMineral;

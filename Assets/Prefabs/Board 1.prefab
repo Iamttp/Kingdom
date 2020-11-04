@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3310599793577097011}
   - component: {fileID: 4117746524781347010}
   m_Layer: 0
-  m_Name: Board
+  m_Name: Board 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -59,7 +59,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 2e69edf1d9288ff449a3380379b0ea22, type: 2}
+  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -96,9 +96,5 @@ MonoBehaviour:
   isOwner: 0
   addType: 0
   addVal: 0
-  colFood:
-  - {r: 0.89497507, g: 1, b: 0.740566, a: 0}
-  - {r: 0.7833497, g: 1, b: 0.24056602, a: 0}
-  colMine:
-  - {r: 0.990566, g: 0.8825451, b: 0.6868548, a: 0}
-  - {r: 1, g: 0.79736996, b: 0.25943398, a: 0}
+  col1: {r: 0.5258544, g: 0.9528302, b: 0.5744124, a: 1}
+  col2: {r: 0.9528302, g: 0.7701243, b: 0.5258544, a: 1}

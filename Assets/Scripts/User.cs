@@ -19,7 +19,7 @@ public class User : MonoBehaviour
     void Awake()
     {
         instance = this;
-        foodVal = mineralVal = 100; // 初始资源
+        //foodVal = mineralVal = 100; // 初始资源
         lifeVal = 1000;
     }
 
