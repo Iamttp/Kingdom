@@ -56,7 +56,7 @@ public class Computer : MonoBehaviour
         {
             aITimeNow = 0;
 
-            Debug.Log(foodVal + " " + mineralVal + " " + lifeVal);
+            //Debug.Log(foodVal + " " + mineralVal + " " + lifeVal);
 
             int tryTime = 3;
             while (tryTime-- > 0)

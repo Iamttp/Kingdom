@@ -12,6 +12,7 @@ public class UIShow : MonoBehaviour
     public GameObject PlaneOfMain;
     public GameObject PlaneOfSoldier;
 
+    public RawImage red;
 
     public List<GameObject> dragList;
 
@@ -26,8 +27,28 @@ public class UIShow : MonoBehaviour
 
     }
 
+    int widthOfRed = 1080 / 2;
+    int lastWidthOfRed;
     void Update()
     {
+        foreach (var now in dragList)
+        {
+            string nameOfSoldier = now.GetComponent<Drag>().nameOfSoldier;
+            var s = SoldierManager.instance.dicSoldier[nameOfSoldier];
+            if (s.needFood > User.instance.foodVal || s.needMineral > User.instance.mineralVal)
+                now.SetActive(false);
+            else
+                now.SetActive(true);
+        }
+
+        widthOfRed = 1080 * User.instance.lifeVal / (User.instance.lifeVal + Computer.instance.lifeVal);
+
+        if (widthOfRed == lastWidthOfRed) return;
+
+        red.GetComponent<RectTransform>().sizeDelta = new Vector2(widthOfRed, 0);
+        red.GetComponent<RectTransform>().anchoredPosition = new Vector2(widthOfRed / 2, 0);
+
+        lastWidthOfRed = widthOfRed;
 
     }
 
@@ -45,7 +66,7 @@ public class UIShow : MonoBehaviour
     {
         PlaneOfMain.SetActive(false);
         PlaneOfSoldier.SetActive(true);
-        foreach(var obj in dragObj)
+        foreach (var obj in dragObj)
         {
             GameObject now = Instantiate(obj);
             dragList.Add(now);

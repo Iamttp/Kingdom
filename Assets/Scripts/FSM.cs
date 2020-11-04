@@ -77,18 +77,20 @@ public class AttackState : StateObject
         int index = (int)(soldier.transform.position.y) + soldier.s.attackDis * soldier.order;
         if (index >= 0 && index < Soldier.height)
         {
-            if (Soldier.boardsUp[i, index] == null && soldier.s.attackDis == 2)
+            if (Soldier.boardsUp[i, index] == null && soldier.s.attackDis == 2) // 考虑弓箭手情况
                 index = (int)(soldier.transform.position.y) + soldier.order;
-            Soldier.boardsUp[i, index].GetComponent<Soldier>().s.lifeVal -=
-                Random.Range(soldier.s.attackValMin, soldier.s.attackValMax);
-            if (Soldier.boardsUp[i, index].GetComponent<Soldier>().s.lifeVal <= 0)
+            if (Soldier.boardsUp[i, index] != null)
             {
-                //DestroyImmediate(Soldier.boardsUp[i, index]); // TODO
-                Soldier.boardsUp[i, index].GetComponent<Soldier>().isDeath = true;
-                Soldier.boardsUp[i, index] = null;
+                Soldier.boardsUp[i, index].GetComponent<Soldier>().s.lifeVal -= Random.Range(soldier.s.attackValMin, soldier.s.attackValMax);
+                if (Soldier.boardsUp[i, index].GetComponent<Soldier>().s.lifeVal <= 0)
+                {
+                    //DestroyImmediate(Soldier.boardsUp[i, index]); // TODO
+                    Soldier.boardsUp[i, index].GetComponent<Soldier>().isDeath = true;
+                    Soldier.boardsUp[i, index] = null;
+                }
             }
-            state = new IdleObject(soldier);
         }
+        state = new IdleObject(soldier);
     }
 }
 
@@ -162,8 +164,8 @@ public class GoState : StateObject
                 Soldier.boardsUp[i, (int)(pos.y)] = null;
                 Soldier.boardsUp[i, index] = soldier.gameObject;
                 soldier.transform.position = new Vector3(soldier.transform.position.x, index, soldier.transform.position.z);
-                state = new IdleObject(soldier);
             }
+            state = new IdleObject(soldier);
         }
     }
 }

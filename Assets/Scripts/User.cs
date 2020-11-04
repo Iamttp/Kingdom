@@ -29,7 +29,7 @@ public class User : MonoBehaviour
 
     void Update()
     {
-        if(lifeVal <= 0)
+        if (lifeVal <= 0)
         {
             Debug.Log("GameOver");
         }
@@ -37,4 +37,22 @@ public class User : MonoBehaviour
         mineralText.text = "Mine : " + mineralVal;
         lifeText.text = "Life : " + lifeVal;
     }
+
+
+    //private static Color red = new Color(1, 0, 0, 1);
+    //public IEnumerator redText(Text text, int timeOfRed, Color orgColor)
+    //{
+    //    if ((timeOfRed & 1) == 0)
+    //    {
+    //        text.color = orgColor;
+    //        if (timeOfRed == 0) yield break;
+    //    }
+    //    else
+    //    {
+    //        text.color = red;
+    //    }
+
+    //    yield return new WaitForSeconds(0.2f);
+    //    StartCoroutine(redText(text, timeOfRed - 1, orgColor));
+    //}
 }

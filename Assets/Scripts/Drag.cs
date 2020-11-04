@@ -62,10 +62,15 @@ public class Drag : MonoBehaviour
     private Vector3 screenPos;
     private Vector3 offset;
 
+    public float beginTime;
+    public float endTime;
+
     void OnMouseDown()
     {
         screenPos = Camera.main.WorldToScreenPoint(transform.position);//获取物体的屏幕坐标     
         offset = screenPos - Input.mousePosition;//获取物体与鼠标在屏幕上的偏移量    
+
+        beginTime = Time.time;
 
         for (int i = 0; i < width; i++)
             for (int j = 0; j < allowRow; j++)
@@ -79,13 +84,16 @@ public class Drag : MonoBehaviour
     {
         //将拖拽后的物体屏幕坐标还原为世界坐标
         transform.position = Camera.main.ScreenToWorldPoint(Input.mousePosition + offset);
-
         upDateSel();
     }
 
     private GameObject nowBoard = null, lastBoard = null;
     void OnMouseUp()
     {
+        endTime = Time.time;
+        //Debug.Log(endTime - beginTime);
+        if (endTime - beginTime < 0.1f) return; // 时间过短，判定为误触
+
         // 释放鼠标 TODO OnMouseUp OnMouseUpAsButton
         if (nowBoard != null)
         {
@@ -112,6 +120,14 @@ public class Drag : MonoBehaviour
                             nowBoard = boards[ii, jj];
                             nowBoard.GetComponent<MeshRenderer>().material.SetColor("_ColorOut", Scene.instance.ownerColor);
                         }
+                }
+                else
+                {
+                    //// 资源不够
+                    //if (SoldierManager.instance.dicSoldier[soldierName].needFood > User.instance.foodVal)
+                    //    StartCoroutine(User.instance.redText(User.instance.foodText, 3, User.instance.foodText.color));
+                    //if (SoldierManager.instance.dicSoldier[soldierName].needMineral > User.instance.mineralVal)
+                    //    StartCoroutine(User.instance.redText(User.instance.mineralText, 3, User.instance.mineralText.color));
                 }
             }
         }
@@ -149,7 +165,7 @@ public class Drag : MonoBehaviour
 
         Vector2 mScreen = Camera.main.WorldToScreenPoint(transform.position);
         Vector2 mPoint = new Vector2(mScreen.x, Screen.height - mScreen.y);
-        GUI.Label(new Rect(mPoint.x - 100, mPoint.y + 10, 150, 70), nameOfSoldier, style2);
-        GUI.Label(new Rect(mPoint.x - 150, mPoint.y + 80, 250, 70), SoldierManager.instance.dicSoldier[nameOfSoldier].needFood + " " + SoldierManager.instance.dicSoldier[nameOfSoldier].needMineral, style2);
+        GUI.Label(new Rect(mPoint.x - 80, mPoint.y + 10, 150, 70), nameOfSoldier, style2);
+        GUI.Label(new Rect(mPoint.x - 80, mPoint.y + 80, 250, 70), SoldierManager.instance.dicSoldier[nameOfSoldier].needFood + " " + SoldierManager.instance.dicSoldier[nameOfSoldier].needMineral, style2);
     }
 }
