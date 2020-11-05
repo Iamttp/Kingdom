@@ -8,7 +8,7 @@ public class Computer : MonoBehaviour
 
     [Header("战斗属性")]
     public float timeOfGo;
-    public List<string> SoldierNames;
+    public List<string> UnitNames;
     public int allowRow;
 
     [Header("AI属性")]
@@ -30,16 +30,16 @@ public class Computer : MonoBehaviour
 
     void Start()
     {
-        height = Scene.instance.height;
-        width = Scene.instance.width;
+        height = Scene.height;
+        width = Scene.width;
         boards = Scene.instance.boards;
         boardsUp = Scene.instance.boardsUp;
 
         //foodVal = mineralVal = 100; // 初始资源
         lifeVal = 1000;
 
-        foreach (var item in SoldierManager.instance.dicSoldier)
-            SoldierNames.Add(item.Key);
+        foreach (var item in UnitManager.instance.dicUnit)
+            UnitNames.Add(item.Key);
     }
 
     private float aITimeNow;
@@ -58,28 +58,57 @@ public class Computer : MonoBehaviour
 
             //Debug.Log(foodVal + " " + mineralVal + " " + lifeVal);
 
-            int tryTime = 3;
-            while (tryTime-- > 0)
+            //int tryTime = 3;
+            //while (tryTime-- > 0)
+            //{
+            //}
+
+            int i = Random.Range(0, width);
+            int j = Random.Range(height - allowRow, height); // 后两行
+            if (boardsUp[i, j] == null) // 任意放置
             {
-                int i = Random.Range(0, width);
-                int j = Random.Range(height - allowRow, height); // 后两行
-                if (!boards[i, j].GetComponent<Board>().isOwner && boardsUp[i, j] == null)
+                foreach (var item in UnitManager.instance.dicUnit)
                 {
-                    string soldierName = SoldierNames[Random.Range(0, SoldierNames.Count)];
-                    var nodeNow = SoldierManager.instance.dicSoldier[soldierName];
-                    // TODO
-                    if (SoldierManager.instance.dicSoldier[soldierName].needFood <= foodVal &&
-                    SoldierManager.instance.dicSoldier[soldierName].needMineral <= mineralVal)
+                    var nodeNow = item.Value;
+                    if (nodeNow.needFood <= foodVal && nodeNow.needMineral <= mineralVal)
                     {
+                        if (Random.value > 0.5f) continue; // 防止一直是最小need的
+
                         foodVal -= nodeNow.needFood;
                         mineralVal -= nodeNow.needMineral;
 
                         Vector3 rotationVector = new Vector3(0, 0, 180);
                         Quaternion rotation = Quaternion.Euler(rotationVector);
-                        nodeNow.prefab.GetComponent<Soldier>().soldierName = soldierName;
+                        nodeNow.prefab.GetComponent<Unit>().nameUnit = nodeNow.name;
 
                         GameObject now = Instantiate(nodeNow.prefab, new Vector3(i, j, -1), rotation);
-                        now.GetComponent<Soldier>().isOwner = false;
+                        now.GetComponent<Unit>().isOwner = false;
+                        boardsUp[i, j] = now;
+                        break;
+                    }
+                }
+            }
+            else if (boardsUp[i, j].GetComponent<Unit>().s.type == 1) // 城堡，放置单位
+            {
+                j--; // 前一格
+                if (boardsUp[i, j] != null) return; // 前方存在部队
+                foreach (var item in UnitManager.instance.dicUnit)
+                {
+                    var nodeNow = item.Value;
+                    if (nodeNow.type == 1) continue;
+                    if (nodeNow.needFood <= foodVal && nodeNow.needMineral <= mineralVal)
+                    {
+                        if (Random.value > 0.5f) continue; // 防止一直是最小need的
+
+                        foodVal -= nodeNow.needFood;
+                        mineralVal -= nodeNow.needMineral;
+
+                        Vector3 rotationVector = new Vector3(0, 0, 180);
+                        Quaternion rotation = Quaternion.Euler(rotationVector);
+                        nodeNow.prefab.GetComponent<Unit>().nameUnit = nodeNow.name;
+
+                        GameObject now = Instantiate(nodeNow.prefab, new Vector3(i, j, -1), rotation);
+                        now.GetComponent<Unit>().isOwner = false;
                         boardsUp[i, j] = now;
                         break;
                     }

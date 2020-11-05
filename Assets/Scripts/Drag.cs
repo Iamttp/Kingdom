@@ -5,7 +5,7 @@ using UnityEngine;
 
 /// <summary>
 /// 
-/// TODO 多兵种模型
+/// TODO 城堡攻击特效
 /// TODO 攻击粒子特效，受击动画
 /// TODO 拖拽bug, 使用图标
 /// TODO 界面混乱
@@ -17,7 +17,8 @@ public class Drag : MonoBehaviour
 
     [Header("初始属性")]
     public Vector3 startPos;
-    public string nameOfSoldier;
+    public int type; // 0 soldier 1 castle
+    public string nameOfUnit;
 
     [Header("来自Scene的属性")]
     public int height; // 8
@@ -43,8 +44,8 @@ public class Drag : MonoBehaviour
         style1 = guiMe.button;
         style2 = guiMe.label;
 
-        height = Scene.instance.height;
-        width = Scene.instance.width;
+        height = Scene.height;
+        width = Scene.width;
         boards = Scene.instance.boards;
         boardsUp = Scene.instance.boardsUp;
 
@@ -88,46 +89,73 @@ public class Drag : MonoBehaviour
     }
 
     private GameObject nowBoard = null, lastBoard = null;
+
+    void downUnit(int i, int j, UnitManager.node nodeNow)
+    {
+        // TODO
+        if (nodeNow.needFood <= User.instance.foodVal && nodeNow.needMineral <= User.instance.mineralVal)
+        {
+            User.instance.foodVal -= nodeNow.needFood;
+            User.instance.mineralVal -= nodeNow.needMineral;
+
+            nodeNow.prefab.GetComponent<Unit>().nameUnit = nodeNow.name;
+            GameObject now = Instantiate(nodeNow.prefab, new Vector3(i, j, -1), new Quaternion());
+            now.GetComponent<Unit>().isOwner = true;
+            boardsUp[i, j] = now;
+            for (int ii = 0; ii < width; ii++)
+                for (int jj = 0; jj < allowRow; jj++)
+                {
+                    nowBoard = boards[ii, jj];
+                    nowBoard.GetComponent<MeshRenderer>().material.SetColor("_ColorOut", Scene.instance.ownerColor);
+                }
+        }
+        //else
+        //{
+        //    // 资源不够
+        //    if (SoldierManager.instance.dicSoldier[soldierName].needFood > User.instance.foodVal)
+        //        StartCoroutine(User.instance.redText(User.instance.foodText, 3, User.instance.foodText.color));
+        //    if (SoldierManager.instance.dicSoldier[soldierName].needMineral > User.instance.mineralVal)
+        //        StartCoroutine(User.instance.redText(User.instance.mineralText, 3, User.instance.mineralText.color));
+        //}
+    }
+
+    // 释放鼠标 TODO OnMouseUp OnMouseUpAsButton
     void OnMouseUp()
     {
         endTime = Time.time;
         //Debug.Log(endTime - beginTime);
         if (endTime - beginTime < 0.1f) return; // 时间过短，判定为误触
 
-        // 释放鼠标 TODO OnMouseUp OnMouseUpAsButton
-        if (nowBoard != null)
-        {
-            int i = (int)nowBoard.transform.position.x;
-            int j = (int)nowBoard.transform.position.y;
-            if (nowBoard.GetComponent<Board>().isOwner && boardsUp[i, j] == null)
-            {
-                string soldierName = nameOfSoldier;
-                var nodeNow = SoldierManager.instance.dicSoldier[soldierName];
-                // TODO
-                if (SoldierManager.instance.dicSoldier[soldierName].needFood <= User.instance.foodVal &&
-                SoldierManager.instance.dicSoldier[soldierName].needMineral <= User.instance.mineralVal)
-                {
-                    User.instance.foodVal -= nodeNow.needFood;
-                    User.instance.mineralVal -= nodeNow.needMineral;
+        if (nowBoard == null) return;
 
-                    nodeNow.prefab.GetComponent<Soldier>().soldierName = soldierName;
-                    GameObject now = Instantiate(nodeNow.prefab, nowBoard.transform.position + new Vector3(0, 0, -1), new Quaternion());
-                    now.GetComponent<Soldier>().isOwner = true;
-                    boardsUp[i, j] = now;
-                    for (int ii = 0; ii < width; ii++)
-                        for (int jj = 0; jj < allowRow; jj++)
-                        {
-                            nowBoard = boards[ii, jj];
-                            nowBoard.GetComponent<MeshRenderer>().material.SetColor("_ColorOut", Scene.instance.ownerColor);
-                        }
+        int i = (int)nowBoard.transform.position.x;
+        int j = (int)nowBoard.transform.position.y;
+
+        var nodeNow = UnitManager.instance.dicUnit[nameOfUnit];
+
+        if (transform.position.x >= 0 - 0.5f && transform.position.x < width + 0.5f &&
+            transform.position.y >= 0 - 0.5f && transform.position.y < allowRow + 0.5f)
+        {
+            if (boardsUp[i, j] == null)
+            {
+                downUnit(i, j, nodeNow);
+            }
+            else if (boardsUp[i, j].GetComponent<Unit>().s.type == 1) // 考虑城堡特殊情况 两城堡
+            {
+                while (boardsUp[i, j] != null && boardsUp[i, j].GetComponent<Unit>().s.type == 1)
+                {
+                    j++;
+                }
+
+                if ((j > allowRow) || (j == allowRow && nodeNow.type == 1) || boardsUp[i, j] != null && boardsUp[i, j].GetComponent<Unit>().s.type == 0)
+                {
+                    // j > allowRow 不放置
+                    // j == allowRow 且为城堡 不放置
+                    // 前方有部队，不放置
                 }
                 else
                 {
-                    //// 资源不够
-                    //if (SoldierManager.instance.dicSoldier[soldierName].needFood > User.instance.foodVal)
-                    //    StartCoroutine(User.instance.redText(User.instance.foodText, 3, User.instance.foodText.color));
-                    //if (SoldierManager.instance.dicSoldier[soldierName].needMineral > User.instance.mineralVal)
-                    //    StartCoroutine(User.instance.redText(User.instance.mineralText, 3, User.instance.mineralText.color));
+                    downUnit(i, j, nodeNow);
                 }
             }
         }
@@ -165,7 +193,7 @@ public class Drag : MonoBehaviour
 
         Vector2 mScreen = Camera.main.WorldToScreenPoint(transform.position);
         Vector2 mPoint = new Vector2(mScreen.x, Screen.height - mScreen.y);
-        GUI.Label(new Rect(mPoint.x - 80, mPoint.y + 10, 150, 70), nameOfSoldier, style2);
-        GUI.Label(new Rect(mPoint.x - 80, mPoint.y + 80, 250, 70), SoldierManager.instance.dicSoldier[nameOfSoldier].needFood + " " + SoldierManager.instance.dicSoldier[nameOfSoldier].needMineral, style2);
+        GUI.Label(new Rect(mPoint.x - 80, mPoint.y + 10, 150, 70), nameOfUnit, style2);
+        GUI.Label(new Rect(mPoint.x - 80, mPoint.y + 80, 250, 70), UnitManager.instance.dicUnit[nameOfUnit].needFood + " " + UnitManager.instance.dicUnit[nameOfUnit].needMineral, style2);
     }
 }

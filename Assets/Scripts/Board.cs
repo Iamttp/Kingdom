@@ -13,6 +13,7 @@ public class Board : MonoBehaviour
     public int addVal;
     public Color[] colFood;
     public Color[] colMine;
+    public int i, j;
 
     public void UpdateColor()
     {
@@ -26,8 +27,13 @@ public class Board : MonoBehaviour
     GUIStyle style2 = new GUIStyle();
     void Start()
     {
-        addType = Random.Range(0, 2);
-        addVal = Random.Range(1, 3); // TODO
+        // 随机生成方式
+        //addType = Random.Range(0, 2);
+        //addVal = Random.Range(1, 3); // TODO
+
+        // 固定board
+        addType = Scene.boardsType[i, j] % 2;
+        addVal = Scene.boardsType[i, j] / 2 + 1;
 
         guiMe = Resources.Load<GUISkin>("Textures/Board");
         style1 = guiMe.button;

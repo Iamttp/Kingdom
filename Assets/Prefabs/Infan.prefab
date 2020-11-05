@@ -107,9 +107,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startPos: {x: 0, y: 0, z: 0}
-  nameOfSoldier: Infantry
+  type: 0
+  nameOfUnit: Infantry
   height: 0
   width: 0
   ownerColor: {r: 0, g: 0, b: 0, a: 0}
   selectColor: {r: 0, g: 0, b: 0, a: 0}
   allowRow: 0
+  beginTime: 0
+  endTime: 0

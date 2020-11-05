@@ -8,13 +8,17 @@ public class UIShow : MonoBehaviour
     public static UIShow instance;
 
     [Header("UI拖拽属性")]
-    public GameObject[] dragObj;
+    public GameObject[] dragSoldierObj;
+    public GameObject[] dragCastleObj;
+
     public GameObject PlaneOfMain;
     public GameObject PlaneOfSoldier;
+    public GameObject PlaneOfCastle;
 
     public RawImage red;
 
-    public List<GameObject> dragList;
+    public List<GameObject> dragSoldierList;
+    public List<GameObject> dragCastleList;
 
     void Awake()
     {
@@ -31,10 +35,20 @@ public class UIShow : MonoBehaviour
     int lastWidthOfRed;
     void Update()
     {
-        foreach (var now in dragList)
+        foreach (var now in dragSoldierList)
         {
-            string nameOfSoldier = now.GetComponent<Drag>().nameOfSoldier;
-            var s = SoldierManager.instance.dicSoldier[nameOfSoldier];
+            string nameOfSoldier = now.GetComponent<Drag>().nameOfUnit;
+            var s = UnitManager.instance.dicUnit[nameOfSoldier];
+            if (s.needFood > User.instance.foodVal || s.needMineral > User.instance.mineralVal)
+                now.SetActive(false);
+            else
+                now.SetActive(true);
+        }
+
+        foreach (var now in dragCastleList)
+        {
+            string nameOfCastle = now.GetComponent<Drag>().nameOfUnit;
+            var s = UnitManager.instance.dicUnit[nameOfCastle];
             if (s.needFood > User.instance.foodVal || s.needMineral > User.instance.mineralVal)
                 now.SetActive(false);
             else
@@ -57,32 +71,51 @@ public class UIShow : MonoBehaviour
         // TODO
         PlaneOfMain.SetActive(true);
         PlaneOfSoldier.SetActive(false);
-        foreach (var now in dragList)
+        PlaneOfCastle.SetActive(false);
+        foreach (var now in dragSoldierList)
             DestroyImmediate(now);
-        dragList.Clear();
+        dragSoldierList.Clear();
+
+        foreach (var now in dragCastleList)
+            DestroyImmediate(now);
+        dragCastleList.Clear();
     }
 
     public void goToSoldier()
     {
         PlaneOfMain.SetActive(false);
         PlaneOfSoldier.SetActive(true);
-        foreach (var obj in dragObj)
+        PlaneOfCastle.SetActive(false);
+        foreach (var obj in dragSoldierObj)
         {
             GameObject now = Instantiate(obj);
-            dragList.Add(now);
+            dragSoldierList.Add(now);
         }
     }
 
+    public void goToCastle()
+    {
+        PlaneOfMain.SetActive(false);
+        PlaneOfSoldier.SetActive(false);
+        PlaneOfCastle.SetActive(true);
+        foreach (var obj in dragCastleObj)
+        {
+            GameObject now = Instantiate(obj);
+            dragCastleList.Add(now);
+        }
+    }
 
     public bool isTopCam;
     public GameObject topCam;
     public GameObject downCam;
     public Button soldierBtn;
+    public Button castleBtn;
     public void switchCam()
     {
         isTopCam = !isTopCam;
         topCam.SetActive(isTopCam);
         downCam.SetActive(!isTopCam);
         soldierBtn.enabled = isTopCam;
+        castleBtn.enabled = isTopCam;
     }
 }
