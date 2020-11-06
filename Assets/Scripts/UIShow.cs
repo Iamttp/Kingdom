@@ -72,11 +72,12 @@ public class UIShow : MonoBehaviour
             DestroyImmediate(now);
         dragCastleList.Clear();
 
-        foreach (var obj in dragSoldierObj)
-        {
-            GameObject now = Instantiate(obj);
-            dragSoldierList.Add(now);
-        }
+        if (dragSoldierList.Count == 0)
+            foreach (var obj in dragSoldierObj)
+            {
+                GameObject now = Instantiate(obj);
+                dragSoldierList.Add(now);
+            }
     }
 
     public void goToCastle()
@@ -85,11 +86,12 @@ public class UIShow : MonoBehaviour
             DestroyImmediate(now);
         dragSoldierList.Clear();
 
-        foreach (var obj in dragCastleObj)
-        {
-            GameObject now = Instantiate(obj);
-            dragCastleList.Add(now);
-        }
+        if (dragCastleList.Count == 0)
+            foreach (var obj in dragCastleObj)
+            {
+                GameObject now = Instantiate(obj);
+                dragCastleList.Add(now);
+            }
     }
 
     public bool isTopCam;
