@@ -103,6 +103,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5870225868741673058}
   - component: {fileID: 169196552559268185}
+  - component: {fileID: 7034511033813825782}
   m_Layer: 0
   m_Name: Castle1
   m_TagString: Untagged
@@ -292,4 +293,15 @@ MonoBehaviour:
   blood_blue: {fileID: 2800000, guid: 3f45c63ca3b5fb44a9b23152fc290aed, type: 3}
   blood_black: {fileID: 2800000, guid: afef1ae970bb21e408f41a7d05527cf5, type: 3}
   cube: {fileID: 1459165933547995440}
-  org: {r: 0, g: 0, b: 0, a: 0}
+--- !u!114 &7034511033813825782
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6000359777178787785}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c05f75a03c2e8641b486687b8fb8542, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

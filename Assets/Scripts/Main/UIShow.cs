@@ -159,4 +159,12 @@ public class UIShow : MonoBehaviour
             dSpeed.text = "x1";
         }
     }
+
+
+    public GameObject PlaneOfInfo;
+    public Text nameText;
+    public Text needFoodText;
+    public Text needMineText;
+    public Text attackText;
+    public Text lifeText;
 }

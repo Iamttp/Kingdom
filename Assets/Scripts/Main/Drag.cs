@@ -5,10 +5,9 @@ using UnityEngine;
 
 /// <summary>
 /// 
-/// TODO 分数统计
 /// TODO 单位简介界面 长按进入 Panel 
 /// TODO 攻击粒子特效，受击动画
-/// TODO 拖拽bug, 使用图标
+/// TODO 分数统计
 /// TODO 界面混乱
 /// 
 /// </summary>
@@ -69,6 +68,8 @@ public class Drag : MonoBehaviour
 
     void OnMouseDown()
     {
+        if (Time.timeScale == 0) return;
+
         screenPos = Camera.main.WorldToScreenPoint(transform.position);//获取物体的屏幕坐标     
         offset = screenPos - Input.mousePosition;//获取物体与鼠标在屏幕上的偏移量    
 
@@ -84,6 +85,8 @@ public class Drag : MonoBehaviour
 
     void OnMouseDrag()
     {
+        if (Time.timeScale == 0) return;
+
         //将拖拽后的物体屏幕坐标还原为世界坐标
         transform.position = Camera.main.ScreenToWorldPoint(Input.mousePosition + offset);
         upDateSel();
@@ -123,6 +126,8 @@ public class Drag : MonoBehaviour
     // 释放鼠标 TODO OnMouseUp OnMouseUpAsButton
     void OnMouseUp()
     {
+        if (Time.timeScale == 0) return;
+
         endTime = Time.time;
         //Debug.Log(endTime - beginTime);
         if (endTime - beginTime < 0.1f) return; // 时间过短，判定为误触
