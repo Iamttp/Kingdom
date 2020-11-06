@@ -5,7 +5,6 @@ using UnityEngine;
 public class Castle : Unit
 {
     public GameObject cube;
-    public Color org;
     void Start()
     {
         guiMe = Resources.Load<GUISkin>("Textures/Soldier");
@@ -19,8 +18,6 @@ public class Castle : Unit
         boardsUp = Scene.instance.boardsUp;
 
         s = UnitManager.instance.dicUnit[nameUnit];
-
-        org = cube.GetComponent<MeshRenderer>().material.color;
     }
 
     private float timeOfAttackNow;

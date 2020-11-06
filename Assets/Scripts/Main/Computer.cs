@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Computer : MonoBehaviour
 {
@@ -50,6 +51,7 @@ public class Computer : MonoBehaviour
         if (lifeVal < 0)
         {
             Debug.Log("WIN");
+            SceneManager.LoadScene(2);
         }
 
         aITimeNow += Time.deltaTime;

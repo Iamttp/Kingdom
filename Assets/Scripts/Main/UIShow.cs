@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class UIShow : MonoBehaviour
@@ -132,5 +133,10 @@ public class UIShow : MonoBehaviour
                 DestroyImmediate(now);
             dragSoldierList.Clear();
         }
+    }
+
+    public void backFun()
+    {
+        SceneManager.LoadScene(0);
     }
 }

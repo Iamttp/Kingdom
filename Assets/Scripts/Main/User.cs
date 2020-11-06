@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class User : MonoBehaviour
@@ -33,6 +34,7 @@ public class User : MonoBehaviour
         if (lifeVal <= 0)
         {
             Debug.Log("GameOver");
+            SceneManager.LoadScene(3);
         }
         foodText.text = "Food : " + foodVal;
         mineralText.text = "Mine : " + mineralVal;
