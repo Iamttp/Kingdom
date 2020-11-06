@@ -65,11 +65,13 @@ public class Drag : MonoBehaviour
 
     public float beginTime;
     public float endTime;
+    public static bool isDrag;
 
     void OnMouseDown()
     {
         if (Time.timeScale == 0) return;
 
+        isDrag = true; // TODO 拖动中
         screenPos = Camera.main.WorldToScreenPoint(transform.position);//获取物体的屏幕坐标     
         offset = screenPos - Input.mousePosition;//获取物体与鼠标在屏幕上的偏移量    
 
@@ -128,6 +130,7 @@ public class Drag : MonoBehaviour
     {
         if (Time.timeScale == 0) return;
 
+        isDrag = false; // TODO 未拖动
         endTime = Time.time;
         //Debug.Log(endTime - beginTime);
         if (endTime - beginTime < 0.1f) return; // 时间过短，判定为误触

@@ -163,8 +163,10 @@ public class UIShow : MonoBehaviour
 
     public GameObject PlaneOfInfo;
     public Text nameText;
+    public Text typeText;
     public Text needFoodText;
     public Text needMineText;
     public Text attackText;
     public Text lifeText;
+    public Text attackDisText;
 }

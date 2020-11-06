@@ -12,7 +12,7 @@ public class Info : MonoBehaviour
 
     void Update()
     {
-        if (!UIShow.instance.isTopCam) return;
+        if (!UIShow.instance.isTopCam || Drag.isDrag) return;
         if (Input.GetMouseButton(0))
         {
             // STOP false;
@@ -27,32 +27,39 @@ public class Info : MonoBehaviour
             if (now == null) return;
 
             // STOP true;
-            showInfo(now.GetComponent<Unit>().s);
+            showInfo(now.GetComponent<Unit>().s, now.GetComponent<Unit>().isOwner);
         }
     }
 
+    float lastScale = 1;
     void unshowInfo()
     {
-        if (Time.timeScale == 0)
+        if (Time.timeScale.Equals(0))
         {
-            Time.timeScale = 1;
-            UIShow.instance.dSpeed.text = "x1";
+            Time.timeScale = lastScale;
+            if ((int)lastScale == 1) UIShow.instance.dSpeed.text = "x1";
+            else if ((int)lastScale == 2) UIShow.instance.dSpeed.text = "x2";
         }
         UIShow.instance.PlaneOfInfo.SetActive(false);
     }
 
-    void showInfo(UnitManager.node s)
+    void showInfo(UnitManager.node s, bool isOwner)
     {
-        if (Time.timeScale != 0)
+        if (!Time.timeScale.Equals(0))
         {
+            lastScale = Time.timeScale;
             Time.timeScale = 0;
             UIShow.instance.dSpeed.text = "x0";
         }
         UIShow.instance.PlaneOfInfo.SetActive(true);
         UIShow.instance.nameText.text = "Name : " + s.name;
+        UIShow.instance.typeText.text = isOwner ? "OUR" : "ENEMY";
         UIShow.instance.needFoodText.text = "Need Food : " + s.needFood;
         UIShow.instance.needMineText.text = "Nedd Mine : " + s.needMineral;
         UIShow.instance.attackText.text = "Attack Val : [" + s.attackValMin + " , " + s.attackValMax + "]";
         UIShow.instance.lifeText.text = "Life Val : " + s.lifeVal + " / " + s.maxVal;
+
+        if (s.type == 1) UIShow.instance.attackDisText.text = "Attack Dis : " + "Eight Dir"; // TODO
+        else UIShow.instance.attackDisText.text = "Attack Dis : " + s.attackDis;
     }
 }
