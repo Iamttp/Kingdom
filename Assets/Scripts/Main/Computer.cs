@@ -51,6 +51,7 @@ public class Computer : MonoBehaviour
         if (lifeVal < 0)
         {
             Debug.Log("WIN");
+            Global.instance.sceneFlag = 1;
             SceneManager.LoadScene(2);
         }
 

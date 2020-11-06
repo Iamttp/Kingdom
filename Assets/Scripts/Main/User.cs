@@ -33,8 +33,9 @@ public class User : MonoBehaviour
     {
         if (lifeVal <= 0)
         {
+            Global.instance.sceneFlag = 2;
             Debug.Log("GameOver");
-            SceneManager.LoadScene(3);
+            SceneManager.LoadScene(2);
         }
         foodText.text = "Food : " + foodVal;
         mineralText.text = "Mine : " + mineralVal;

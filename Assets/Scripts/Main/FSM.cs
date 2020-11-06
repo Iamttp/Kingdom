@@ -154,7 +154,7 @@ public class AttackState : StateObject
                     Unit.boardsUp[i, index].GetComponent<Unit>().isDeath = true;
                     Unit.boardsUp[i, index] = null;
                 }
-                EffectManager.instance.attackEffect(1, new Vector3(i, index, unit.transform.position.z));
+                EffectManager.instance.attackEffect(1, new Vector3(i, index, unit.transform.position.z), 0.2f);
             }
         }
 

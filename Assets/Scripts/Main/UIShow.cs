@@ -139,4 +139,24 @@ public class UIShow : MonoBehaviour
     {
         SceneManager.LoadScene(0);
     }
+
+    public Text dSpeed;
+    public void timeDouble()
+    {
+        if (Time.timeScale == 1)
+        {
+            Time.timeScale = 2;
+            dSpeed.text = "x2";
+        }
+        else if(Time.timeScale == 2)
+        {
+            Time.timeScale = 0;
+            dSpeed.text = "x0";
+        }
+        else
+        {
+            Time.timeScale = 1;
+            dSpeed.text = "x1";
+        }
+    }
 }

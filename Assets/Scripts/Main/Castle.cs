@@ -52,7 +52,7 @@ public class Castle : Unit
                                 tag.GetComponent<Soldier>().isDeath = true;
                                 boardsUp[newX, newY] = null;
                             }
-                            EffectManager.instance.attackEffect(0, new Vector3(newX, newY, transform.position.z));
+                            EffectManager.instance.attackEffect(0, new Vector3(newX, newY, transform.position.z), 0.3f);
                             return; // return 攻击一次 TODO
                         }
                     }
