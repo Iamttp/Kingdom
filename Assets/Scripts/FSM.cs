@@ -23,6 +23,10 @@ public abstract class Unit : MonoBehaviour
     //黑色血条贴图
     public Texture2D blood_black;
 
+    public IdleObject idle = new IdleObject(null);
+    public AttackState attack = new AttackState(null);
+    public GoState go = new GoState(null);
+
     void OnGUI()
     {
         if (!UIShow.instance.isTopCam) return;
@@ -58,11 +62,17 @@ public abstract class StateObject
 
 public class IdleObject : StateObject
 {
-    private float nowTime;
+    private float nowTime = 0;
 
     public IdleObject(Soldier unit) : base(unit)
     {
-        nowTime = 0;
+    }
+
+    public IdleObject GetIdleObject(Soldier unit)
+    {
+        unit.idle.unit = unit;
+        unit.idle.nowTime = 0;
+        return unit.idle;
     }
 
     bool isAttack(int index)
@@ -93,11 +103,11 @@ public class IdleObject : StateObject
             int index = (int)(unit.transform.position.y) + unit.s.attackDis * unit.order;
             if (isAttack(index))
             {
-                state = new AttackState(unit);
+                state = unit.attack.GetAttackObject(unit);
             }
             else if (unit.s.attackDis == 2 && isAttack((int)(unit.transform.position.y) + unit.order)) // 考虑弓箭手情况
             {
-                state = new AttackState(unit);
+                state = unit.attack.GetAttackObject(unit);
             }
             else
             {
@@ -105,7 +115,7 @@ public class IdleObject : StateObject
                 int j = (int)(unit.transform.position.y) + unit.order;
                 if (j >= 0 && j < Unit.height && Unit.boardsUp[i, j] != null) return;
 
-                state = new GoState(unit);
+                state = unit.go.GetGoObject(unit);
             }
         }
     }
@@ -115,6 +125,12 @@ public class AttackState : StateObject
 {
     public AttackState(Soldier unit) : base(unit)
     {
+    }
+
+    public AttackState GetAttackObject(Soldier unit)
+    {
+        unit.attack.unit = unit;
+        return unit.attack;
     }
 
     public override void update(float deltaTime, ref StateObject state) // TODO time
@@ -141,7 +157,8 @@ public class AttackState : StateObject
                 EffectManager.instance.attackEffect(1, new Vector3(i, index, unit.transform.position.z));
             }
         }
-        state = new IdleObject(unit);
+
+        state = unit.idle.GetIdleObject(unit);
     }
 }
 
@@ -153,8 +170,14 @@ public class GoState : StateObject
 
     public GoState(Soldier unit) : base(unit)
     {
-        nowTime = 0;
-        pos = unit.transform.position;
+    }
+
+    public GoState GetGoObject(Soldier unit)
+    {
+        unit.go.unit = unit;
+        unit.go.nowTime = 0;
+        unit.go.pos = unit.transform.position;
+        return unit.go;
     }
 
     public override void update(float deltaTime, ref StateObject state)
@@ -172,7 +195,8 @@ public class GoState : StateObject
             {
                 unit.transform.position = pos;
                 nowTime = 0;
-                state = new IdleObject(unit);
+
+                state = unit.idle.GetIdleObject(unit);
                 return;
             }
         }
@@ -198,7 +222,7 @@ public class GoState : StateObject
                 var objTag = Unit.boardsUp[i, index];
                 if (objTag != null && objTag.GetComponent<Unit>().isOwner == unit.isOwner) // 前面存在我方部队
                 {
-                    state = new IdleObject(unit);
+                    state = unit.idle.GetIdleObject(unit);
                     return;
                 }
 
@@ -215,7 +239,8 @@ public class GoState : StateObject
                 Unit.boardsUp[i, index] = unit.gameObject;
                 unit.transform.position = new Vector3(unit.transform.position.x, index, unit.transform.position.z);
             }
-            state = new IdleObject(unit);
+
+            state = unit.idle.GetIdleObject(unit);
         }
     }
 }

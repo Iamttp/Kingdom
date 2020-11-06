@@ -33,8 +33,20 @@ public class UIShow : MonoBehaviour
 
     int widthOfRed = 1080 / 2;
     int lastWidthOfRed;
+
     void Update()
     {
+        if (!isTopCam)
+        {
+            if (Input.touchCount == 1) //单点触碰移动摄像机
+            {
+                if (Input.touches[0].phase == TouchPhase.Moved) //手指在屏幕上移动，移动摄像机
+                {
+                    downCam.transform.RotateAround(new Vector3(2, 3.5f, 0), new Vector3(0, 0, 1), -Input.touches[0].deltaPosition.x * Time.deltaTime * 2); // 绕 （2 3.5f 0） 旋转
+                }
+            }
+        }
+
         foreach (var now in dragSoldierList)
         {
             string nameOfSoldier = now.GetComponent<Drag>().nameOfUnit;
@@ -63,7 +75,6 @@ public class UIShow : MonoBehaviour
         red.GetComponent<RectTransform>().anchoredPosition = new Vector2(widthOfRed / 2, 0);
 
         lastWidthOfRed = widthOfRed;
-
     }
 
     public void goToSoldier()

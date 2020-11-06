@@ -5,6 +5,7 @@ using UnityEngine;
 
 /// <summary>
 /// 
+/// TODO 单位简介界面 长按进入 Panel 
 /// TODO 城堡攻击特效
 /// TODO 攻击粒子特效，受击动画
 /// TODO 拖拽bug, 使用图标
