@@ -55,18 +55,11 @@ public class Castle : Unit
                                 tag.GetComponent<Soldier>().isDeath = true;
                                 boardsUp[newX, newY] = null;
                             }
-                            StartCoroutine(effect());
+                            EffectManager.instance.attackEffect(0, new Vector3(newX, newY, transform.position.z));
                             return; // return 攻击一次 TODO
                         }
                     }
                 }
         }
-    }
-
-    IEnumerator effect()
-    {
-        cube.GetComponent<MeshRenderer>().material.color = new Color(1, 0, 0, 1);
-        yield return new WaitForSeconds(0.1f);
-        cube.GetComponent<MeshRenderer>().material.color = org;
     }
 }
