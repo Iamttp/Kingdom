@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Castle : Unit
 {
+    public GameObject cube;
+
     void Start()
     {
         guiMe = Resources.Load<GUISkin>("Textures/Soldier");
@@ -51,10 +53,18 @@ public class Castle : Unit
                                 tag.GetComponent<Soldier>().isDeath = true;
                                 boardsUp[newX, newY] = null;
                             }
+                            StartCoroutine(effect());
                             return; // return 攻击一次 TODO
                         }
                     }
                 }
         }
+    }
+
+    IEnumerator effect()
+    {
+        cube.GetComponent<MeshRenderer>().material.color = new Color(1, 0, 0, 1);
+        yield return new WaitForSeconds(0.1f);
+        cube.GetComponent<MeshRenderer>().material.color = new Color(1, 1, 1, 1);
     }
 }

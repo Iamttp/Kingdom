@@ -28,7 +28,7 @@ public class UIShow : MonoBehaviour
 
     void Start()
     {
-
+        goToSoldier(); // 默认士兵界面
     }
 
     int widthOfRed = 1080 / 2;
@@ -66,26 +66,12 @@ public class UIShow : MonoBehaviour
 
     }
 
-    public void goToMain()
+    public void goToSoldier()
     {
-        // TODO
-        PlaneOfMain.SetActive(true);
-        PlaneOfSoldier.SetActive(false);
-        PlaneOfCastle.SetActive(false);
-        foreach (var now in dragSoldierList)
-            DestroyImmediate(now);
-        dragSoldierList.Clear();
-
         foreach (var now in dragCastleList)
             DestroyImmediate(now);
         dragCastleList.Clear();
-    }
 
-    public void goToSoldier()
-    {
-        PlaneOfMain.SetActive(false);
-        PlaneOfSoldier.SetActive(true);
-        PlaneOfCastle.SetActive(false);
         foreach (var obj in dragSoldierObj)
         {
             GameObject now = Instantiate(obj);
@@ -95,9 +81,10 @@ public class UIShow : MonoBehaviour
 
     public void goToCastle()
     {
-        PlaneOfMain.SetActive(false);
-        PlaneOfSoldier.SetActive(false);
-        PlaneOfCastle.SetActive(true);
+        foreach (var now in dragSoldierList)
+            DestroyImmediate(now);
+        dragSoldierList.Clear();
+
         foreach (var obj in dragCastleObj)
         {
             GameObject now = Instantiate(obj);
@@ -117,5 +104,20 @@ public class UIShow : MonoBehaviour
         downCam.SetActive(!isTopCam);
         soldierBtn.enabled = isTopCam;
         castleBtn.enabled = isTopCam;
+
+        if (isTopCam)
+        {
+            goToSoldier();
+        }
+        else
+        {
+            foreach (var now in dragCastleList)
+                DestroyImmediate(now);
+            dragCastleList.Clear();
+
+            foreach (var now in dragSoldierList)
+                DestroyImmediate(now);
+            dragSoldierList.Clear();
+        }
     }
 }

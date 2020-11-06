@@ -16,6 +16,7 @@ public class Computer : MonoBehaviour
     public int foodVal;
     public int mineralVal;
     public int lifeVal;
+    public int addVal;
 
     [Header("来自Scene的属性")]
     public int height; // 8
@@ -55,6 +56,12 @@ public class Computer : MonoBehaviour
         if (aITimeNow >= aITime)
         {
             aITimeNow = 0;
+
+            foodVal += addVal;      // AI 资源
+            mineralVal += addVal;
+
+            User.instance.foodVal += User.instance.addVal;
+            User.instance.mineralVal += User.instance.addVal;
 
             //Debug.Log(foodVal + " " + mineralVal + " " + lifeVal);
 

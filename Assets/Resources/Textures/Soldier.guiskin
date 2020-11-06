@@ -270,7 +270,7 @@ MonoBehaviour:
       m_Bottom: 0
     m_Font: {fileID: 0}
     m_FontSize: 60
-    m_FontStyle: 1
+    m_FontStyle: 2
     m_Alignment: 0
     m_WordWrap: 1
     m_RichText: 1

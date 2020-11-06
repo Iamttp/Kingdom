@@ -193,7 +193,7 @@ public class Drag : MonoBehaviour
 
         Vector2 mScreen = Camera.main.WorldToScreenPoint(transform.position);
         Vector2 mPoint = new Vector2(mScreen.x, Screen.height - mScreen.y);
-        GUI.Label(new Rect(mPoint.x - 80, mPoint.y + 10, 150, 70), nameOfUnit, style2);
-        GUI.Label(new Rect(mPoint.x - 80, mPoint.y + 80, 250, 70), UnitManager.instance.dicUnit[nameOfUnit].needFood + " " + UnitManager.instance.dicUnit[nameOfUnit].needMineral, style2);
+        GUI.Label(new Rect(mPoint.x - 80, mPoint.y + 70, 150, 70), nameOfUnit, style2);
+        //GUI.Label(new Rect(mPoint.x - 80, mPoint.y + 80, 250, 70), UnitManager.instance.dicUnit[nameOfUnit].needFood + " " + UnitManager.instance.dicUnit[nameOfUnit].needMineral, style2);
     }
 }

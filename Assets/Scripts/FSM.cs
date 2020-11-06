@@ -101,6 +101,10 @@ public class IdleObject : StateObject
             }
             else
             {
+                int i = (int)(unit.transform.position.x);
+                int j = (int)(unit.transform.position.y) + unit.order;
+                if (j >= 0 && j < Unit.height && Unit.boardsUp[i, j] != null) return;
+
                 state = new GoState(unit);
             }
         }

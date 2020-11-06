@@ -12,6 +12,7 @@ public class User : MonoBehaviour
     public Text mineralText;
     public Text lifeText;
 
+    public int addVal;
     public int foodVal;
     public int mineralVal;
     public int lifeVal;
